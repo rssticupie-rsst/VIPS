@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#166534">
+<title>VIPS Digital | Penilaian Flebitis</title>
+<style>
+:root{--green:#166534;--green2:#15803d;--bg:#f3f7f4;--ink:#17221a;--muted:#5b6b60;--line:#d6e1d8;--white:#fff;--amber:#fff7d6;--red:#fee2e2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.45}
+header{background:linear-gradient(120deg,#14532d,#15803d);color:white;padding:24px 16px}
+.wrap{max-width:1000px;margin:auto;padding:0 14px}.brand{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.9;font-weight:bold}
+h1{font-size:clamp(24px,4vw,34px);margin:6px 0}header p{margin:0;opacity:.92}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+button,.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer;font-size:14px}
+button.primary,.btn.primary{background:var(--green);color:white}button.secondary,.btn.secondary{background:#e4eee6;color:var(--green)}button.danger{background:#fee2e2;color:#991b1b}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #12331b08}
+h2{font-size:19px;margin:0 0 12px}h3{font-size:15px;margin:16px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label.field{display:block;font-size:13px;font-weight:700;color:#34463a}
+input,select,textarea{display:block;width:100%;padding:11px;border:1px solid #bdcec1;border-radius:9px;margin-top:5px;font:inherit;background:#fff;color:var(--ink)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-weight:500;background:#fcfdfc}
+.check input{width:18px;height:18px;margin:1px 0 0;flex:0 0 auto}
+.result{display:flex;align-items:center;gap:16px;padding:16px;border-radius:14px;background:#f0fdf4;border:1px solid #bbf7d0}
+.score{font-size:48px;line-height:1;font-weight:800;min-width:62px;text-align:center;color:var(--green)}
+.result h3{margin:0 0 4px;font-size:18px}.result p{margin:4px 0}
+.notice{padding:12px 14px;border-radius:10px;background:var(--amber);border:1px solid #f2d675;font-size:13px}
+.alert{padding:12px 14px;border-radius:10px;background:var(--red);border:1px solid #fca5a5;color:#7f1d1d;font-size:13px}
+.small{font-size:12px;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f1f6f2}
+.tablewrap{overflow:auto}.pill{display:inline-block;border-radius:999px;padding:3px 9px;background:#e4eee6;color:#14532d;font-weight:bold;font-size:12px}
+.hidden{display:none!important}.footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(max-width:650px){.grid,.checks{grid-template-columns:1fr}.card{padding:14px}.result{align-items:flex-start}.score{font-size:42px;min-width:50px}}
+@media print{body{background:white;font-size:11px}header{background:white;color:#111;padding:0 0 12px}.wrap{max-width:none;padding:0}.no-print,nav,.footer{display:none!important}.card{box-shadow:none;border:1px solid #bbb;break-inside:avoid;padding:10px;margin:8px 0}.checks{grid-template-columns:repeat(2,1fr)}input,select,textarea{border:0;padding:2px}.result{background:white;border:1px solid #999}.score{color:#111}#historyCard{display:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand">Alat bantu pengkajian klinis • Prototipe</div>
+<h1>VIPS Digital</h1>
+<p>Visual Infusion Phlebitis Score — Penilaian tanda flebitis pada area infus</p>
+</div></header>
+<main class="wrap">
+<nav class="no-print">
+<button class="primary" id="tabAssessment">Pengkajian baru</button>
+<button class="secondary" id="tabHistory">Riwayat & rekap</button>
+</nav>
+
+<section id="assessment">
+<div class="card">
+<h2>1. Informasi pengkajian</h2>
+<div class="grid">
+<label class="field">Kode episode / kode pasien (hindari nama lengkap)
+<input id="patientCode" maxlength="40" placeholder="Contoh: ICU-001 (opsional)"></label>
+<label class="field">Lokasi / unit
+<input id="location" maxlength="80" value="ICU PIE"></label>
+<label class="field">Nama / inisial pemeriksa
+<input id="assessor" maxlength="80" placeholder="Inisial atau ID petugas"></label>
+<label class="field">Tanggal dan waktu pengkajian
+<input id="assessedAt" type="datetime-local"></label>
+</div>
+<p class="small">Prototipe ini menyimpan data di browser/perangkat yang digunakan. Data tidak otomatis tersinkron ke perangkat lain.</p>
+</div>
+
+<div class="card">
+<h2>2. Pilih tanda dan gejala yang ditemukan</h2>
+<p class="small">Pilih semua temuan yang sesuai. Bedakan nyeri ringan/lokal dengan nyeri sepanjang jalur kanula bila memang dapat dibedakan saat pengkajian.</p>
+<div class="checks">
+<label class="check"><input type="checkbox" id="mildPain" class="symptom">Nyeri ringan pada tempat IV</label>
+<label class="check"><input type="checkbox" id="slightRed" class="symptom">Sedikit kemerahan dekat IV line</label>
+<label class="check"><input type="checkbox" id="pain" class="symptom">Nyeri sepanjang jalur kanula / IV line</label>
+<label class="check"><input type="checkbox" id="redness" class="symptom">Kemerahan</label>
+<label class="check"><input type="checkbox" id="swelling" class="symptom">Pembengkakan</label>
+<label class="check"><input type="checkbox" id="hardVein" class="symptom">Vena teraba keras</label>
+<label class="check"><input type="checkbox" id="pyrexia" class="symptom">Pireksia / demam</label>
+</div>
+<div class="actions no-print">
+<button class="primary" id="calculate">Hitung skor VIPS</button>
+<button class="secondary" id="reset">Bersihkan pilihan</button>
+</div>
+</div>
+
+<div class="card" id="resultCard" aria-live="polite">
+<h2>3. Hasil penilaian</h2>
+<div class="result">
+<div class="score" id="score">—</div>
+<div><h3 id="scoreTitle">Pilih gejala lalu hitung skor</h3><p id="scoreDesc">Interpretasi dan tindakan yang ditampilkan harus dikonfirmasi terhadap SOP rumah sakit.</p></div>
+</div>
+<div id="logicAlert" class="alert hidden" style="margin-top:12px"></div>
+<div class="notice" style="margin-top:12px"><strong>Catatan keselamatan:</strong> hasil ini adalah alat bantu dokumentasi, bukan pengganti penilaian klinis. Bila temuan berat, kondisi memburuk, atau ada kecurigaan komplikasi, lakukan penilaian klinis dan eskalasi sesuai SOP tanpa menunda demi aplikasi.</div>
+<div class="actions no-print">
+<button class="primary" id="save">Simpan penilaian ke riwayat perangkat</button>
+<button class="secondary" id="print">Cetak / Simpan sebagai PDF</button>
+<button class="secondary" id="exportOne">Ekspor hasil ini (CSV)</button>
+</div>
+<p id="saveMessage" class="small"></p>
+</div>
+</section>
+
+<section id="historyCard" class="card hidden">
+<h2>Riwayat & rekap lokal</h2>
+<p class="small">Riwayat tersimpan hanya di browser ini. Jangan gunakan sebagai rekam medis resmi sebelum ada persetujuan tata kelola, keamanan, dan integrasi rumah sakit.</p>
+<div class="grid no-print">
+<label class="field">Filter kode episode
+<input id="filterCode" placeholder="Kosongkan untuk semua"></label>
+<label class="field">Filter unit
+<input id="filterLocation" placeholder="Misalnya ICU PIE"></label>
+</div>
+<div class="actions no-print">
+<button class="primary" id="exportAll">Ekspor seluruh riwayat (CSV)</button>
+<button class="secondary" id="printHistory">Cetak rekap</button>
+<button class="danger" id="clearHistory">Hapus semua riwayat lokal</button>
+</div>
+<div class="tablewrap" style="margin-top:14px">
+<table><thead><tr><th>Waktu</th><th>Kode episode</th><th>Unit</th><th>Pemeriksa</th><th>Skor</th><th>Interpretasi</th><th>Temuan</th></tr></thead><tbody id="historyRows"></tbody></table>
+</div>
+<p id="historyCount" class="small"></p>
+</section>
+
+<div class="card">
+<h2>Informasi validasi</h2>
+<p>Aturan pada prototipe ini diturunkan dari gambar VIPS yang diberikan. Sebelum dipakai klinis, tim keperawatan, IPC, DPJP/komite medis dan mutu/keselamatan pasien perlu menyetujui versi skala, definisi gejala, algoritme skor, tindakan, dan dokumentasi.</p>
+<ul>
+<li>Skor 0–5 dan deskripsi tindakan pada gambar menjadi acuan awal.</li>
+<li>Jika gejala tidak cocok dengan kombinasi lengkap pada skala, aplikasi menampilkan peringatan untuk verifikasi manual.</li>
+<li>Tindakan “ganti kanula” dan “kolaborasi dengan dokter” harus dikonfirmasi sesuai SOP serta kondisi pasien.</li>
+<li>Jangan mengisi data identitas langsung pasien pada prototipe atau membagikan ekspor tanpa pengamanan yang disetujui rumah sakit.</li>
+</ul>
+</div>
+</main>
+<div class="footer">VIPS Digital • Prototipe untuk validasi internal • Bukan alat medis tervalidasi</div>
+<script>
+const $ = id => document.getElementById(id);
+const symptomIds = ["mildPain","slightRed","pain","redness","swelling","hardVein","pyrexia"];
+const symptomLabels = {
+ mildPain:"Nyeri ringan pada tempat IV", slightRed:"Sedikit kemerahan dekat IV line",
+ pain:"Nyeri sepanjang jalur kanula / IV line", redness:"Kemerahan",
+ swelling:"Pembengkakan", hardVein:"Vena teraba keras", pyrexia:"Pireksia / demam"
+};
+const levels = [
+ {title:"Tidak ada tanda flebitis",desc:"Tidak ada tanda flebitis. Observasi kanula.",action:"Observasi kanula."},
+ {title:"Mungkin tanda flebitis",desc:"Kemungkinan tanda flebitis. Observasi kanula.",action:"Observasi kanula."},
+ {title:"Stadium dini flebitis",desc:"Stadium dini flebitis.",action:"Ganti kanula sesuai SOP yang disahkan."},
+ {title:"Stadium moderat flebitis",desc:"Stadium moderat flebitis.",action:"Ganti kanula dan kolaborasi dengan dokter sesuai SOP."},
+ {title:"Stadium lanjut atau awal tromboflebitis",desc:"Stadium lanjut atau awal tromboflebitis.",action:"Ganti kanula dan kolaborasi dengan dokter sesuai SOP."},
+ {title:"Stadium lanjut tromboflebitis",desc:"Stadium lanjut tromboflebitis.",action:"Ganti kanula dan kolaborasi dengan dokter sesuai SOP."}
+];
+let currentResult = null;
+function getSelected(){return Object.fromEntries(symptomIds.map(id=>[id,$(id).checked]));}
+function scoreSymptoms(s){
+ const core = [s.pain,s.redness,s.swelling].filter(Boolean).length;
+ let score = 0;
+ // Apply the highest fully satisfied pattern shown in the supplied chart.
+ if(s.pain && s.redness && s.swelling && s.hardVein && s.pyrexia) score=5;
+ else if(s.pain && s.redness && s.swelling && s.hardVein) score=4;
+ else if(s.pain && s.redness && s.swelling) score=3;
+ else if(core===2) score=2;
+ else if(s.mildPain || s.slightRed || core===1) score=1;
+ else score=0;
+ const advancedWithoutCore = (s.hardVein || s.pyrexia) && !(s.pain && s.redness && s.swelling);
+ const possibleMismatch = (s.mildPain && (s.pain || s.redness || s.swelling)) ||
+   (s.slightRed && (s.pain || s.redness || s.swelling)) ||
+   (advancedWithoutCore) ||
+   (s.pyrexia && !s.hardVein);
+ return {score,advancedWithoutCore,possibleMismatch,coreCount:core};
+}
+function renderResult(){
+ const s=getSelected(), result=scoreSymptoms(s), level=levels[result.score];
+ currentResult={...result, symptoms:s, level, assessedAt:$("assessedAt").value || new Date().toISOString().slice(0,16), patientCode:$("patientCode").value.trim(), location:$("location").value.trim(), assessor:$("assessor").value.trim()};
+ $("score").textContent=result.score;
+ $("scoreTitle").textContent=level.title;
+ $("scoreDesc").textContent=level.desc+" Tindakan pada prototipe: "+level.action;
+ const alerts=[];
+ if(result.possibleMismatch) alerts.push("Kombinasi gejala perlu verifikasi manual terhadap skala/SOP yang disahkan. Jangan mengandalkan skor otomatis saja.");
+ if(result.advancedWithoutCore) alerts.push("Vena teraba keras atau pireksia dipilih tanpa seluruh kombinasi gejala inti. Lakukan penilaian klinis dan eskalasi sesuai SOP.");
+ $("logicAlert").classList.toggle("hidden",alerts.length===0);
+ $("logicAlert").textContent=alerts.join(" ");
+ $("saveMessage").textContent="";
+ return currentResult;
+}
+function readHistory(){try{return JSON.parse(localStorage.getItem("vipsDigitalHistory")||"[]")}catch(e){return []}}
+function writeHistory(items){localStorage.setItem("vipsDigitalHistory",JSON.stringify(items))}
+function selectedText(r){return symptomIds.filter(id=>r.symptoms[id]).map(id=>symptomLabels[id]).join("; ")||"Tidak ada gejala yang dipilih"}
+function makeRecord(r){return {id:Date.now()+"-"+Math.random().toString(36).slice(2,7),assessedAt:r.assessedAt,patientCode:r.patientCode,location:r.location,assessor:r.assessor,score:r.score,title:r.level.title,action:r.level.action,symptoms:r.symptoms,findings:selectedText(r),warning:r.possibleMismatch||r.advancedWithoutCore}}
+function csvEscape(v){return '"'+String(v??"").replace(/"/g,'""')+'"'}
+function downloadCSV(rows,filename){
+ const cols=["assessedAt","patientCode","location","assessor","score","title","action","findings","warning"];
+ const csv=[cols.join(","),...rows.map(r=>cols.map(c=>csvEscape(r[c])).join(","))].join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);
+}
+function filteredHistory(){
+ const code=$("filterCode").value.trim().toLowerCase(),loc=$("filterLocation").value.trim().toLowerCase();
+ return readHistory().filter(r=>(!code||(r.patientCode||"").toLowerCase().includes(code))&&(!loc||(r.location||"").toLowerCase().includes(loc))).sort((a,b)=>String(b.assessedAt).localeCompare(String(a.assessedAt)));
+}
+function renderHistory(){
+ const rows=filteredHistory();const tbody=$("historyRows");tbody.innerHTML="";
+ if(!rows.length){tbody.innerHTML='<tr><td colspan="7">Belum ada data yang cocok.</td></tr>'}
+ rows.forEach(r=>{
+ const tr=document.createElement("tr");
+ [r.assessedAt||"",r.patientCode||"—",r.location||"—",r.assessor||"—",String(r.score),r.title||"",r.findings||""].forEach((v,i)=>{const td=document.createElement("td");td.textContent=v;if(i===4){td.innerHTML="";const span=document.createElement("span");span.className="pill";span.textContent=v;td.appendChild(span)}tr.appendChild(td)});
+ tbody.appendChild(tr);
+ });
+ $("historyCount").textContent=rows.length+" penilaian ditampilkan.";
+}
+function showTab(which){
+ $("assessment").classList.toggle("hidden",which!=="assessment");
+ $("historyCard").classList.toggle("hidden",which!=="history");
+ $("tabAssessment").className=which==="assessment"?"primary":"secondary";
+ $("tabHistory").className=which==="history"?"primary":"secondary";
+ if(which==="history")renderHistory();
+}
+function initialDate(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());$("assessedAt").value=d.toISOString().slice(0,16)}
+$("calculate").addEventListener("click",renderResult);
+$("symptom");
+document.querySelectorAll(".symptom").forEach(el=>el.addEventListener("change",()=>{currentResult=null;$("score").textContent="—";$("scoreTitle").textContent="Pilihan berubah — hitung ulang skor";$("scoreDesc").textContent="Tekan “Hitung skor VIPS” untuk memperbarui hasil."; $("logicAlert").classList.add("hidden")}));
+$("reset").addEventListener("click",()=>{document.querySelectorAll(".symptom").forEach(el=>el.checked=false);currentResult=null;$("score").textContent="—";$("scoreTitle").textContent="Pilih gejala lalu hitung skor";$("scoreDesc").textContent="Interpretasi dan tindakan yang ditampilkan harus dikonfirmasi terhadap SOP rumah sakit.";$("logicAlert").classList.add("hidden");$("saveMessage").textContent=""});
+$("save").addEventListener("click",()=>{if(!currentResult){$("saveMessage").textContent="Hitung skor terlebih dahulu.";return}const rec=makeRecord(currentResult);const all=readHistory();all.push(rec);writeHistory(all);$("saveMessage").textContent="Penilaian disimpan di browser ini. Riwayat tidak otomatis tersedia pada perangkat lain.";});
+$("print").addEventListener("click",()=>{if(!currentResult)renderResult();window.print()});
+$("exportOne").addEventListener("click",()=>{if(!currentResult){$("saveMessage").textContent="Hitung skor terlebih dahulu.";return}downloadCSV([makeRecord(currentResult)],"vips-penilaian.csv")});
+$("tabAssessment").addEventListener("click",()=>showTab("assessment"));
+$("tabHistory").addEventListener("click",()=>showTab("history"));
+$("filterCode").addEventListener("input",renderHistory);$("filterLocation").addEventListener("input",renderHistory);
+$("exportAll").addEventListener("click",()=>downloadCSV(filteredHistory(),"vips-riwayat.csv"));
+$("printHistory").addEventListener("click",()=>window.print());
+$("clearHistory").addEventListener("click",()=>{if(confirm("Hapus seluruh riwayat VIPS dari browser/perangkat ini? Tindakan tidak dapat dibatalkan.")){localStorage.removeItem("vipsDigitalHistory");renderHistory()}});
+initialDate();
+</script>
+</body></html>
