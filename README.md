@@ -1,4 +1,4 @@
-# VIPS Digital — Prototipe Web App
+# VIPS Digital
 
 ## Isi
 - `index.html`: aplikasi web satu berkas, tanpa proses build.
